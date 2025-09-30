@@ -5,38 +5,34 @@ import { motion } from "framer-motion";
 
 export default function MideaHeader() {
   return (
-    <motion.header
+    <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-dark rounded-3xl p-6 mb-8 relative overflow-hidden"
+      className="glass-dark rounded-3xl p-6 md:p-8 mb-8 relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-[#00A0E3]/5 via-[#7DD4F5]/5 to-[#00A0E3]/5 animate-gradient" />
       
-      <div className="relative flex items-center justify-between">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <motion.div
-            className="animate-float"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className="relative"
           >
-            <Image
-              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/image_rmbg_edited_2025_09_11-1-1759199420181.png"
-              alt="Midea Carrier Mascot"
-              width={120}
-              height={120}
-              className="drop-shadow-2xl"
+            <img
+              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/mascote_1-1759235606883.png"
+              alt="Midea Mascot"
+              className="w-20 h-20 md:w-24 md:h-24 object-contain animate-float"
             />
           </motion.div>
           
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#00A0E3] to-[#005A8C] bg-clip-text text-transparent">
-              Dashboard Jurídico Consumidor
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
+              Jurídico Consumidor • Performance de Acordos (GPS)
             </h1>
-            <p className="text-[#005A8C] font-medium mt-1">
-              Midea Carrier - Gestão Estratégica de Performance
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              Análise de Acordos e KPIs | Janeiro - Setembro 2025
+            <p className="text-gray-600 text-sm md:text-base">
+              Análise Executiva • Janeiro a Setembro 2025
             </p>
           </div>
         </div>
@@ -51,6 +47,6 @@ export default function MideaHeader() {
           />
         </div>
       </div>
-    </motion.header>
+    </motion.div>
   );
 }

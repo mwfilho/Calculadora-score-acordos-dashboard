@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { TrendingUp, TrendingDown, FileText, DollarSign, Target, Clock, CheckCircle, AlertCircle, Scale, Gavel, Timer } from "lucide-react";
+import { TrendingUp, TrendingDown, FileText, DollarSign, Target, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import MetricCard from "./MetricCard";
 import { 
   LineChart, 
@@ -22,17 +22,17 @@ import {
   Area 
 } from "recharts";
 
-// Data constants
+// Dados reais do PDF
 const monthlyData = [
-  { month: "Jan", acordos: 46, ticketMedio: 2033, conversao: 28.5, judicial: 32, administrativo: 14, preSentenca: 34, posSentenca: 12 },
-  { month: "Fev", acordos: 87, ticketMedio: 2126, conversao: 29.1, judicial: 58, administrativo: 29, preSentenca: 64, posSentenca: 23 },
-  { month: "Mar", acordos: 114, ticketMedio: 2148, conversao: 29.8, judicial: 78, administrativo: 36, preSentenca: 85, posSentenca: 29 },
-  { month: "Abr", acordos: 124, ticketMedio: 2012, conversao: 28.9, judicial: 86, administrativo: 38, preSentenca: 92, posSentenca: 32 },
-  { month: "Mai", acordos: 102, ticketMedio: 2157, conversao: 29.5, judicial: 71, administrativo: 31, preSentenca: 76, posSentenca: 26 },
-  { month: "Jun", acordos: 73, ticketMedio: 2190, conversao: 28.7, judicial: 50, administrativo: 23, preSentenca: 54, posSentenca: 19 },
-  { month: "Jul", acordos: 126, ticketMedio: 2022, conversao: 30.1, judicial: 88, administrativo: 38, preSentenca: 93, posSentenca: 33 },
-  { month: "Ago", acordos: 97, ticketMedio: 2256, conversao: 39.2, judicial: 68, administrativo: 29, preSentenca: 72, posSentenca: 25, gps: true },
-  { month: "Set", acordos: 87, ticketMedio: 2031, conversao: 38.6, judicial: 61, administrativo: 26, preSentenca: 64, posSentenca: 23, gps: true },
+  { month: "Jan", acordos: 46, ticketMedio: 2033, conversao: 28.5, mixOF: 8.5 },
+  { month: "Fev", acordos: 87, ticketMedio: 2126, conversao: 29.1, mixOF: 9.2 },
+  { month: "Mar", acordos: 114, ticketMedio: 2148, conversao: 29.8, mixOF: 10.1 },
+  { month: "Abr", acordos: 124, ticketMedio: 2012, conversao: 28.9, mixOF: 11.3 },
+  { month: "Mai", acordos: 102, ticketMedio: 2157, conversao: 29.5, mixOF: 10.8 },
+  { month: "Jun", acordos: 73, ticketMedio: 2190, conversao: 28.7, mixOF: 9.7 },
+  { month: "Jul", acordos: 126, ticketMedio: 2022, conversao: 30.1, mixOF: 11.5 },
+  { month: "Ago", acordos: 97, ticketMedio: 2256, conversao: 39.2, mixOF: 11.8, gps: true },
+  { month: "Set", acordos: 87, ticketMedio: 2031, conversao: 38.6, mixOF: 12.2, gps: true },
 ];
 
 const stateData = [
@@ -58,26 +58,9 @@ const motivosRecusa = [
   { motivo: "Outros motivos", quantidade: 42, percentual: 14.5 },
 ];
 
-const performanceComparativa = [
-  { categoria: "Taxa Conversão", preGPS: 29.2, posGPS: 38.9 },
-  { categoria: "Ticket Médio", preGPS: 2097, posGPS: 1840 },
-  { categoria: "Tempo Fechamento", preGPS: 20.8, posGPS: 19.6 },
-  { categoria: "Acordos/Mês", preGPS: 96, posGPS: 92 },
-];
-
-const esferaComparacao = [
-  { esfera: "Judicial", acordos: 584, ticketMedio: 2234, conversao: 31.2 },
-  { esfera: "Administrativa", acordos: 272, ticketMedio: 1876, conversao: 36.8 },
-];
-
-const faseSentenca = [
-  { fase: "Pré-Sentença", acordos: 634, percentual: 74.1, ticketMedio: 1897 },
-  { fase: "Pós-Sentença", acordos: 222, percentual: 25.9, ticketMedio: 2543 },
-];
-
 const COLORS = ["#00A0E3", "#7DD4F5", "#005A8C", "#003D5C"];
 
-type SubTab = "visao-geral" | "judicial-admin" | "pre-pos-sentenca" | "analise-recusas";
+type SubTab = "visao-geral" | "analise-recusas";
 
 export default function DashboardGeral() {
   const [subTab, setSubTab] = useState<SubTab>("visao-geral");
@@ -93,7 +76,7 @@ export default function DashboardGeral() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSubTab("visao-geral")}
-            className={`flex-1 min-w-[150px] px-4 py-3 rounded-xl font-semibold transition-all ${
+            className={`flex-1 min-w-[200px] px-4 py-3 rounded-xl font-semibold transition-all ${
               subTab === "visao-geral"
                 ? "bg-gradient-to-r from-[#00A0E3] to-[#005A8C] text-white shadow-lg"
                 : "text-gray-600 hover:bg-white/50"
@@ -102,28 +85,8 @@ export default function DashboardGeral() {
             📊 Visão Geral
           </button>
           <button
-            onClick={() => setSubTab("judicial-admin")}
-            className={`flex-1 min-w-[150px] px-4 py-3 rounded-xl font-semibold transition-all ${
-              subTab === "judicial-admin"
-                ? "bg-gradient-to-r from-[#00A0E3] to-[#005A8C] text-white shadow-lg"
-                : "text-gray-600 hover:bg-white/50"
-            }`}
-          >
-            ⚖️ Judicial vs Administrativo
-          </button>
-          <button
-            onClick={() => setSubTab("pre-pos-sentenca")}
-            className={`flex-1 min-w-[150px] px-4 py-3 rounded-xl font-semibold transition-all ${
-              subTab === "pre-pos-sentenca"
-                ? "bg-gradient-to-r from-[#00A0E3] to-[#005A8C] text-white shadow-lg"
-                : "text-gray-600 hover:bg-white/50"
-            }`}
-          >
-            ⏰ Pré vs Pós-Sentença
-          </button>
-          <button
             onClick={() => setSubTab("analise-recusas")}
-            className={`flex-1 min-w-[150px] px-4 py-3 rounded-xl font-semibold transition-all ${
+            className={`flex-1 min-w-[200px] px-4 py-3 rounded-xl font-semibold transition-all ${
               subTab === "analise-recusas"
                 ? "bg-gradient-to-r from-[#00A0E3] to-[#005A8C] text-white shadow-lg"
                 : "text-gray-600 hover:bg-white/50"
@@ -337,12 +300,45 @@ export default function DashboardGeral() {
               </ResponsiveContainer>
             </motion.div>
 
-            {/* Cluster Distribution */}
+            {/* Mix OF Evolution */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
               className="glass-dark rounded-2xl p-6"
+            >
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Evolução Mix OF (sem DM) - YTD</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={monthlyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="month" stroke="#6B7280" />
+                  <YAxis stroke="#6B7280" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "1px solid #E5E7EB",
+                      borderRadius: "8px",
+                    }}
+                  />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="mixOF"
+                    stroke="#7DD4F5"
+                    strokeWidth={3}
+                    name="Mix OF sem DM (%)"
+                    dot={{ fill: "#7DD4F5", r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </motion.div>
+
+            {/* Cluster Distribution */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0 }}
+              className="glass-dark rounded-2xl p-6 lg:col-span-2"
             >
               <h3 className="text-lg font-bold text-gray-800 mb-4">Distribuição por Cluster Regional</h3>
               <ResponsiveContainer width="100%" height={300}>
@@ -372,332 +368,6 @@ export default function DashboardGeral() {
               </ResponsiveContainer>
             </motion.div>
           </div>
-        </motion.div>
-      )}
-
-      {/* Judicial vs Administrativo */}
-      {subTab === "judicial-admin" && (
-        <motion.div
-          key="judicial-admin"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
-          {/* Comparison Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl">
-                  <Scale className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">Esfera Judicial</h3>
-                  <p className="text-sm text-gray-600">Processos judicializados</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total de Acordos</span>
-                  <span className="text-2xl font-bold text-purple-600">584</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ticket Médio</span>
-                  <span className="text-xl font-bold text-purple-600">R$ 2.234</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Taxa de Conversão</span>
-                  <span className="text-xl font-bold text-purple-600">31,2%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Percentual do Total</span>
-                  <span className="text-xl font-bold text-purple-600">68,2%</span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl">
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">Esfera Administrativa</h3>
-                  <p className="text-sm text-gray-600">Processos administrativos</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total de Acordos</span>
-                  <span className="text-2xl font-bold text-blue-600">272</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ticket Médio</span>
-                  <span className="text-xl font-bold text-blue-600">R$ 1.876</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Taxa de Conversão</span>
-                  <span className="text-xl font-bold text-blue-600">36,8%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Percentual do Total</span>
-                  <span className="text-xl font-bold text-blue-600">31,8%</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Evolução Mensal: Judicial vs Administrativo</h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <ComposedChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="month" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="judicial" fill="#9C27B0" name="Judicial" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="administrativo" fill="#2196F3" name="Administrativo" radius={[8, 8, 0, 0]} />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Comparativo de Performance</h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={esferaComparacao} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis type="number" stroke="#6B7280" />
-                  <YAxis dataKey="esfera" type="category" stroke="#6B7280" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="acordos" fill="#00A0E3" name="Total Acordos" radius={[0, 8, 8, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </motion.div>
-          </div>
-
-          {/* Insights */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="glass rounded-2xl p-6"
-          >
-            <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Insights Estratégicos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-purple-50 rounded-xl">
-                <div className="text-purple-700 font-bold mb-2">📊 Volume</div>
-                <p className="text-sm text-gray-700">Esfera judicial representa 68,2% do total de acordos, indicando maior litigiosidade</p>
-              </div>
-              <div className="p-4 bg-green-50 rounded-xl">
-                <div className="text-green-700 font-bold mb-2">✅ Conversão</div>
-                <p className="text-sm text-gray-700">Esfera administrativa tem conversão 5,6 p.p. maior (36,8% vs 31,2%)</p>
-              </div>
-              <div className="p-4 bg-blue-50 rounded-xl">
-                <div className="text-blue-700 font-bold mb-2">💰 Ticket Médio</div>
-                <p className="text-sm text-gray-700">Judicial tem ticket 19% maior (R$ 2.234 vs R$ 1.876), refletindo complexidade</p>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Pré vs Pós-Sentença */}
-      {subTab === "pre-pos-sentenca" && (
-        <motion.div
-          key="pre-pos-sentenca"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
-          {/* Comparison Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-green-500 to-green-700 rounded-xl">
-                  <Timer className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">Fase Pré-Sentença</h3>
-                  <p className="text-sm text-gray-600">Acordos antes da sentença</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total de Acordos</span>
-                  <span className="text-2xl font-bold text-green-600">634</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ticket Médio</span>
-                  <span className="text-xl font-bold text-green-600">R$ 1.897</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Percentual do Total</span>
-                  <span className="text-xl font-bold text-green-600">74,1%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Economia Estimada</span>
-                  <span className="text-xl font-bold text-green-600">R$ 410k</span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-700 rounded-xl">
-                  <Gavel className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">Fase Pós-Sentença</h3>
-                  <p className="text-sm text-gray-600">Acordos após a sentença</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total de Acordos</span>
-                  <span className="text-2xl font-bold text-orange-600">222</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ticket Médio</span>
-                  <span className="text-xl font-bold text-orange-600">R$ 2.543</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Percentual do Total</span>
-                  <span className="text-xl font-bold text-orange-600">25,9%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Custo Adicional</span>
-                  <span className="text-xl font-bold text-orange-600">R$ 143k</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Evolução Mensal: Pré vs Pós-Sentença</h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <ComposedChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="month" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Area type="monotone" dataKey="preSentenca" fill="#4CAF50" stroke="#4CAF50" fillOpacity={0.6} name="Pré-Sentença" />
-                  <Area type="monotone" dataKey="posSentenca" fill="#FF9800" stroke="#FF9800" fillOpacity={0.6} name="Pós-Sentença" />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass-dark rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Distribuição por Fase</h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <PieChart>
-                  <Pie
-                    data={faseSentenca}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    label={({ fase, percentual }) => `${fase}: ${percentual}%`}
-                    outerRadius={120}
-                    fill="#8884d8"
-                    dataKey="acordos"
-                  >
-                    <Cell fill="#4CAF50" />
-                    <Cell fill="#FF9800" />
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </motion.div>
-          </div>
-
-          {/* Insights */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="glass rounded-2xl p-6"
-          >
-            <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Insights Estratégicos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-green-50 rounded-xl">
-                <div className="text-green-700 font-bold mb-2">⚡ Agilidade</div>
-                <p className="text-sm text-gray-700">74,1% dos acordos fechados na fase pré-sentença, reduzindo tempo e custos processuais</p>
-              </div>
-              <div className="p-4 bg-blue-50 rounded-xl">
-                <div className="text-blue-700 font-bold mb-2">💰 Economia</div>
-                <p className="text-sm text-gray-700">Ticket médio pré-sentença 25% menor (R$ 1.897 vs R$ 2.543), gerando economia de R$ 410k</p>
-              </div>
-              <div className="p-4 bg-yellow-50 rounded-xl">
-                <div className="text-yellow-700 font-bold mb-2">🎯 Oportunidade</div>
-                <p className="text-sm text-gray-700">Meta: aumentar acordos pré-sentença para 85%, elevando eficiência e reduzindo custos</p>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       )}
 
