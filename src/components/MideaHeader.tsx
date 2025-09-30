@@ -20,18 +20,20 @@ export default function MideaHeader() {
             transition={{ type: "spring", stiffness: 200 }}
             className="relative"
           >
-            <img
-              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/mascote_1-1759235606883.png"
+            <Image
+              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/image_rmbg_edited_2025_09_11-1-1759230715276.png"
               alt="Midea Mascot"
+              width={96}
+              height={96}
               className="w-20 h-20 md:w-24 md:h-24 object-contain animate-float"
             />
           </motion.div>
           
           <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-[#00A0E3] via-[#005A8C] to-[#003D5C] bg-clip-text text-transparent mb-2">
               Jurídico Consumidor • Performance de Acordos (GPS)
             </h1>
-            <p className="text-gray-600 text-sm md:text-base">
+            <p className="text-gray-600 text-sm md:text-base font-medium">
               Análise Executiva • Janeiro a Setembro 2025
             </p>
           </div>
