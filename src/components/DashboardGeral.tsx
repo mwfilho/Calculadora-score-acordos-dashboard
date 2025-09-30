@@ -22,6 +22,7 @@ import {
   Area 
 } from "recharts";
 
+// Data constants
 const monthlyData = [
   { month: "Jan", acordos: 46, ticketMedio: 2033, conversao: 28.5, judicial: 32, administrativo: 14, preSentenca: 34, posSentenca: 12 },
   { month: "Fev", acordos: 87, ticketMedio: 2126, conversao: 29.1, judicial: 58, administrativo: 29, preSentenca: 64, posSentenca: 23 },
